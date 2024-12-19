@@ -3,6 +3,7 @@ import SocialMediaLinks from "./SocialMediaLinks";
 import { SlUserFollowing } from "react-icons/sl";
 import { GrContactInfo } from "react-icons/gr";
 import { GiQuickSlash } from "react-icons/gi";
+import { FaLink } from "react-icons/fa";
 
 // components/Footer.js
 const Footer = () => {
@@ -88,10 +89,10 @@ const Footer = () => {
               </span>
             </h3>
             <ul className="space-y-2 text-gray-400 dark:text-gray-300 text-center sm:text-left">
-              <li>New Delhi, India</li>
-              <li>Phone: (555) 123-4567</li>
-              <li>Email: contact@devdossier.com</li>
-            </ul>
+  <li>New Delhi, India</li>
+  <li className="flex items-center justify-center sm:justify-start">Phone:<a href="https://wa.me/message/M2VS7GDQ3MFAG1" target="_blank" className="cursor-pointer hover:font-bold flex items-center">&nbsp;+91 9560362339<FaLink className="ml-2" size="15"/></a></li>
+  <li className="flex items-center justify-center sm:justify-start">Email: <a href="mailto:devdossier55@gmail.com" className="cursor-pointer hover:font-bold flex items-center">&nbsp;devdossier55@gmail.com<FaLink className="ml-2" size="15"/></a></li>
+</ul>
           </div>
 
           {/* Social Links */}

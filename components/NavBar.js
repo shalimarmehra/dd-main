@@ -1,6 +1,6 @@
+/* eslint-disable react/react-in-jsx-scope */
 "use client";
 // components/Navbar.js
-import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +18,6 @@ import SocialMediaLinks from "./SocialMediaLinks";
 import { FaHome } from "react-icons/fa";
 import { TbLogs } from "react-icons/tb";
 import { FaServicestack } from "react-icons/fa";
-import { FaInfo } from "react-icons/fa";
 import { GrContact } from "react-icons/gr";
 import { BiSolidRightArrow } from "react-icons/bi";
 import { useAuth } from "@/app/auth/AuthContext";
@@ -27,7 +26,6 @@ import { MdDashboardCustomize } from "react-icons/md";
 import { IoCreate, IoLogIn, IoLogOut } from "react-icons/io5";
 
 export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isLoggedIn, userRole, logout } = useAuth();
 
   return (
@@ -69,14 +67,14 @@ export default function Navbar() {
               <TbLogs className="mr-2" />
               Blogs
             </Link>
-            {/* <Link
+             <Link
               href="/services"
               className="text-gray-600 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white cursor-pointer relative flex items-center transition-all duration-300 hover:scale-105 after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-gray-900 dark:after:bg-white after:bottom-0 after:left-0 after:scale-x-0 hover:after:scale-x-100 after:transition-transform text-shadow-sm"
             >
               <FaServicestack className="mr-2" />
               Services
             </Link>
-            <Link
+            {/*<Link
               href="/about"
               className="text-gray-600 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white cursor-pointer relative flex items-center transition-all duration-300 hover:scale-105 after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-gray-900 dark:after:bg-white after:bottom-0 after:left-0 after:scale-x-0 hover:after:scale-x-100 after:transition-transform text-shadow-sm"
             >
@@ -101,7 +99,7 @@ export default function Navbar() {
                 <Link href={"/login"}>
                   <Button
                     style={{
-                      padding: "0.8rem 1.5rem",
+                      padding: "0.8rem 1.0rem",
                       fontSize: "clamp(0.8rem, 2vw, 1rem)",
                       transition: "all 0.3s ease",
                       transform: "scale(1)",
@@ -123,7 +121,7 @@ export default function Navbar() {
                 <Link href={"/signup"}>
                   <Button
                     style={{
-                      padding: "0.8rem 1.5rem",
+                      padding: "0.8rem 1.0rem",
                       fontSize: "clamp(0.8rem, 2vw, 1rem)",
                       transition: "all 0.3s ease",
                       transform: "scale(1)",
@@ -207,7 +205,7 @@ export default function Navbar() {
                 <SheetHeader>
                   <SheetTitle className="text-center font-poppins text-2xl font-semibold tracking-tight flex items-center justify-center dark:text-gray-100 light:text-gray-900 mt-[-10px]">
                     <Image
-                      src="/dd1.png"
+                      src="/logo.png"
                       alt="devdossier"
                       width={50}
                       height={50}
@@ -281,6 +279,20 @@ export default function Navbar() {
                         >
                           <TbLogs className="mr-2" />
                           Blogs
+                          <BiSolidRightArrow className="ml-auto" />
+                        </Link>
+
+                        <Link
+                          href="/services"
+                          className="group flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900 cursor-pointer transition-all duration-300 ease-in-out"
+                          onClick={() =>
+                            document
+                              .querySelector('[data-state="open"]')
+                              ?.click()
+                          }
+                        >
+                          <FaServicestack className="mr-2" />
+                          Services
                           <BiSolidRightArrow className="ml-auto" />
                         </Link>
 

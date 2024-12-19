@@ -185,7 +185,7 @@ const page = () => {
                               alt="Gmail gif"
                               className="w-4 h-4 ml-1"
                             />
-                            <a href="https://wa.me/message/M2VS7GDQ3MFAG1" target="_blank">
+                            <a href="https://wa.me/message/M2VS7GDQ3MFAG1" target="_blank" rel="noreferrer">
                             <div
                               className="ml-3 text-sm md:text-base tracking-wide font-semibold bg-yellow-100 dark:bg-yellow-900 px-2 py-1 rounded hover:font-bold hover:scale-105 transition-all cursor-pointer"
                               title="+44 1234567890"
