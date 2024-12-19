@@ -41,7 +41,7 @@ export default function Navbar() {
               className="flex items-center gap-1 hover:opacity-90 transition-all"
             >
               <Image
-                src="/dd1.png"
+                src="/logo.png"
                 alt="devdossier"
                 width={50}
                 height={50}

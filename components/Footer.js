@@ -14,8 +14,8 @@ const Footer = () => {
           <div className="mb-6 md:mb-6">
             <div className="flex flex-row items-center justify-center sm:justify-start">
               <Image
-                src="/dd1.png"
-                alt="Tech Dossier"
+                src="/logo.png"
+                alt="devdossier"
                 width={50}
                 height={50}
                 className="w-[50px] h-[48px] object-contain invert mr-2"
