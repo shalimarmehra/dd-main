@@ -136,22 +136,36 @@ export default function Navbar() {
                 </Link>
               </>
             ) : (
-              <div className="flex items-center">
-                {" "}
-                <button onClick={logout} className="mx-2">
-                  Logout
-                </button>{" "}
+              <div className="flex items-center">                
                 {userRole === "admin" ? (
                   <Link href="/adminDashboard">
                     {" "}
-                    <span className="mx-2">Admin Profile</span>{" "}
+                    <span className="mx-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 ease-in-out 
+  transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-opacity-50 
+  bg-gradient-to-r from-black to-gray-600 hover:from-gray-600 hover:to-black
+  text-white dark:from-purple-500 dark:to-pink-500 dark:hover:from-pink-500 dark:hover:to-purple-500
+  shadow-lg hover:shadow-xl active:scale-95">Admin</span>{" "}
                   </Link>
                 ) : (
                   <Link href="/dashboard">
                     {" "}
-                    <span className="mx-2">Profile</span>{" "}
+                    <span className="mx-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 ease-in-out 
+  transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-opacity-50 
+  bg-gradient-to-r from-black to-gray-600 hover:from-gray-600 hover:to-black
+  text-white dark:from-purple-500 dark:to-pink-500 dark:hover:from-pink-500 dark:hover:to-purple-500
+  shadow-lg hover:shadow-xl active:scale-95 cursor-pointer">Dashboard</span>{" "}
                   </Link>
                 )}
+                <button 
+  onClick={logout} 
+  className="mx-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ease-in-out 
+  transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-opacity-50 
+  bg-gradient-to-r from-black to-gray-600 hover:from-gray-600 hover:to-black
+  text-white dark:from-purple-500 dark:to-pink-500 dark:hover:from-pink-500 dark:hover:to-purple-500
+  shadow-lg hover:shadow-xl active:scale-95"
+>
+  Logout
+</button>{" "}
               </div>
             )}
             <ThemeToggle />
@@ -317,21 +331,20 @@ export default function Navbar() {
                         </>
                         ) : (
                           <div className="flex items-center">
-                            {" "}
-                            <button onClick={logout} className="mx-2">
-                              Logout
-                            </button>{" "}
                             {userRole === "admin" ? (
                               <Link href="/adminDashboard">
                                 {" "}
-                                <span className="mx-2">Admin Profile</span>{" "}
+                                <span className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2">Admin</span>{" "}
                               </Link>
                             ) : (
                               <Link href="/dashboard">
                                 {" "}
-                                <span className="mx-2">Profile</span>{" "}
+                                <span className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2">Dashboard</span>{" "}
                               </Link>
                             )}
+                            <button onClick={logout} className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2">
+                              Logout
+                            </button>{" "}
                           </div>
                         )}
                       </div>
