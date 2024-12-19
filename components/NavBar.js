@@ -22,6 +22,9 @@ import { FaInfo } from "react-icons/fa";
 import { GrContact } from "react-icons/gr";
 import { BiSolidRightArrow } from "react-icons/bi";
 import { useAuth } from "@/app/auth/AuthContext";
+import { RiAdminFill } from "react-icons/ri";
+import { MdDashboardCustomize } from "react-icons/md";
+import { IoCreate, IoLogIn, IoLogOut } from "react-icons/io5";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -103,6 +106,8 @@ export default function Navbar() {
                       transition: "all 0.3s ease",
                       transform: "scale(1)",
                       cursor: "pointer",
+                      disply: "flex",
+                      alignItems: "center",
                     }}
                     onMouseOver={(e) => {
                       e.target.style.transform = "scale(1.05)";
@@ -111,7 +116,7 @@ export default function Navbar() {
                       e.target.style.transform = "scale(1)";
                     }}
                   >
-                    Login
+                    Login<IoLogIn className="" />
                   </Button>
                 </Link>
 
@@ -123,6 +128,8 @@ export default function Navbar() {
                       transition: "all 0.3s ease",
                       transform: "scale(1)",
                       cursor: "pointer",
+                      disply: "flex",
+                      alignItems: "center",
                     }}
                     onMouseOver={(e) => {
                       e.target.style.transform = "scale(1.05)";
@@ -131,7 +138,7 @@ export default function Navbar() {
                       e.target.style.transform = "scale(1)";
                     }}
                   >
-                    Signup
+                    Signup<IoCreate />
                   </Button>
                 </Link>
               </>
@@ -140,20 +147,20 @@ export default function Navbar() {
                 {userRole === "admin" ? (
                   <Link href="/adminDashboard">
                     {" "}
-                    <span className="mx-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 ease-in-out 
+                    <span className="mx-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ease-in-out 
   transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-opacity-50 
   bg-gradient-to-r from-black to-gray-600 hover:from-gray-600 hover:to-black
   text-white dark:from-purple-500 dark:to-pink-500 dark:hover:from-pink-500 dark:hover:to-purple-500
-  shadow-lg hover:shadow-xl active:scale-95">Admin</span>{" "}
+  shadow-lg hover:shadow-xl active:scale-95 flex items-center"> Admin<RiAdminFill className="ml-2"/></span>{" "}
                   </Link>
                 ) : (
                   <Link href="/dashboard">
                     {" "}
-                    <span className="mx-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 ease-in-out 
+                    <span className="mx-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ease-in-out 
   transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-opacity-50 
   bg-gradient-to-r from-black to-gray-600 hover:from-gray-600 hover:to-black
   text-white dark:from-purple-500 dark:to-pink-500 dark:hover:from-pink-500 dark:hover:to-purple-500
-  shadow-lg hover:shadow-xl active:scale-95 cursor-pointer">Dashboard</span>{" "}
+  shadow-lg hover:shadow-xl active:scale-95 cursor-pointer flex items-center">Dashboard<MdDashboardCustomize className="ml-2"/></span>{" "}
                   </Link>
                 )}
                 <button 
@@ -162,9 +169,9 @@ export default function Navbar() {
   transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-opacity-50 
   bg-gradient-to-r from-black to-gray-600 hover:from-gray-600 hover:to-black
   text-white dark:from-purple-500 dark:to-pink-500 dark:hover:from-pink-500 dark:hover:to-purple-500
-  shadow-lg hover:shadow-xl active:scale-95"
+  shadow-lg hover:shadow-xl active:scale-95 flex items-center"
 >
-  Logout
+  Logout<IoLogOut className="ml-2"/>
 </button>{" "}
               </div>
             )}
@@ -330,20 +337,20 @@ export default function Navbar() {
                         </div>
                         </>
                         ) : (
-                          <div className="flex items-center">
+                          <div className="flex items-center gap-2">
                             {userRole === "admin" ? (
                               <Link href="/adminDashboard">
                                 {" "}
-                                <span className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2">Admin</span>{" "}
+                                <span className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2 flex items-center">Admin<RiAdminFill className="ml-2"/></span>{" "}
                               </Link>
                             ) : (
                               <Link href="/dashboard">
                                 {" "}
-                                <span className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2">Dashboard</span>{" "}
+                                <span className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2 flex items-center">Dashboard<MdDashboardCustomize className="ml-2" /></span>{" "}
                               </Link>
                             )}
-                            <button onClick={logout} className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2">
-                              Logout
+                            <button onClick={logout} className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2 flex items-center">
+                            Logout<IoLogOut className="ml-2"/>
                             </button>{" "}
                           </div>
                         )}

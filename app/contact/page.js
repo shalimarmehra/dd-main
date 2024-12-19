@@ -185,12 +185,14 @@ const page = () => {
                               alt="Gmail gif"
                               className="w-4 h-4 ml-1"
                             />
+                            <a href="https://wa.me/message/M2VS7GDQ3MFAG1" target="_blank">
                             <div
-                              className="ml-3 text-sm md:text-base tracking-wide font-semibold bg-yellow-100 dark:bg-yellow-900 px-2 py-1 rounded hover:font-bold hover:scale-105 transition-all"
+                              className="ml-3 text-sm md:text-base tracking-wide font-semibold bg-yellow-100 dark:bg-yellow-900 px-2 py-1 rounded hover:font-bold hover:scale-105 transition-all cursor-pointer"
                               title="+44 1234567890"
                             >
-                              +44 1234567890
+                              +91 9560362339
                             </div>
+                            </a>
                           </div>
                         </div>
 
@@ -211,12 +213,14 @@ const page = () => {
                               alt="Gmail gif"
                               className="w-4 h-4 ml-1"
                             />
+                            <a href="mailto:devdossier55@gmail.com">
                             <div
-                              className="ml-3 text-sm md:text-base tracking-wide font-semibold bg-yellow-100 dark:bg-yellow-900 px-2 py-1 rounded flex items-center hover:font-bold hover:scale-105 transition-all"
+                              className="ml-3 text-sm md:text-base tracking-wide font-semibold bg-yellow-100 dark:bg-yellow-900 px-2 py-1 rounded flex items-center hover:font-bold hover:scale-105 transition-all cursor-pointer"
                               title="example@gmail.com"
                             >
-                              example@gmail.com
+                              devdossier55@gmail.com
                             </div>
+                            </a>
                           </div>
                         </div>
                       </div>
