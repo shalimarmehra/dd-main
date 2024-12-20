@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import Hero from "@/components/Hero";
 import SimpleDivider from "../components/SimpleDivider";
 import Blogs from "@/components/Blogs";

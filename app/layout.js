@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/react-in-jsx-scope */
 "use client";
 import { useState, useEffect } from "react";
 import Preloader from "../components/Preloader";

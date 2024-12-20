@@ -67,7 +67,7 @@ export default function Navbar() {
               <TbLogs className="mr-2" />
               Blogs
             </Link>
-             <Link
+            <Link
               href="/services"
               className="text-gray-600 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white cursor-pointer relative flex items-center transition-all duration-300 hover:scale-105 after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-gray-900 dark:after:bg-white after:bottom-0 after:left-0 after:scale-x-0 hover:after:scale-x-100 after:transition-transform text-shadow-sm"
             >
@@ -114,7 +114,8 @@ export default function Navbar() {
                       e.target.style.transform = "scale(1)";
                     }}
                   >
-                    Login<IoLogIn className="" />
+                    Login
+                    <IoLogIn className="" />
                   </Button>
                 </Link>
 
@@ -136,41 +137,54 @@ export default function Navbar() {
                       e.target.style.transform = "scale(1)";
                     }}
                   >
-                    Signup<IoCreate />
+                    Signup
+                    <IoCreate />
                   </Button>
                 </Link>
               </>
             ) : (
-              <div className="flex items-center">                
+              <div className="flex items-center">
                 {userRole === "admin" ? (
                   <Link href="/adminDashboard">
                     {" "}
-                    <span className="mx-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ease-in-out 
+                    <span
+                      className="mx-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ease-in-out 
   transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-opacity-50 
   bg-gradient-to-r from-black to-gray-600 hover:from-gray-600 hover:to-black
-  text-white dark:from-purple-500 dark:to-pink-500 dark:hover:from-pink-500 dark:hover:to-purple-500
-  shadow-lg hover:shadow-xl active:scale-95 flex items-center"> Admin<RiAdminFill className="ml-2"/></span>{" "}
+  text-white dark:from-white dark:to-gray-200 dark:hover:from-gray-200 dark:hover:to-white dark:text-black
+  shadow-lg hover:shadow-xl active:scale-95 flex items-center"
+                    >
+                      {" "}
+                      Admin
+                      <RiAdminFill className="ml-2" />
+                    </span>{" "}
                   </Link>
                 ) : (
                   <Link href="/dashboard">
                     {" "}
-                    <span className="mx-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ease-in-out 
+                    <span
+                      className="mx-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ease-in-out 
   transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-opacity-50 
   bg-gradient-to-r from-black to-gray-600 hover:from-gray-600 hover:to-black
-  text-white dark:from-purple-500 dark:to-pink-500 dark:hover:from-pink-500 dark:hover:to-purple-500
-  shadow-lg hover:shadow-xl active:scale-95 cursor-pointer flex items-center">Dashboard<MdDashboardCustomize className="ml-2"/></span>{" "}
+  text-white dark:from-white dark:to-gray-200 dark:hover:from-gray-200 dark:hover:to-white dark:text-black
+  shadow-lg hover:shadow-xl active:scale-95 cursor-pointer flex items-center"
+                    >
+                      Dashboard
+                      <MdDashboardCustomize className="ml-2" />
+                    </span>{" "}
                   </Link>
                 )}
-                <button 
-  onClick={logout} 
-  className="mx-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ease-in-out 
+                <button
+                  onClick={logout}
+                  className="mx-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ease-in-out 
   transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-opacity-50 
   bg-gradient-to-r from-black to-gray-600 hover:from-gray-600 hover:to-black
-  text-white dark:from-purple-500 dark:to-pink-500 dark:hover:from-pink-500 dark:hover:to-purple-500
+  text-white dark:from-white dark:to-gray-200 dark:hover:from-gray-200 dark:hover:to-white dark:text-black
   shadow-lg hover:shadow-xl active:scale-95 flex items-center"
->
-  Logout<IoLogOut className="ml-2"/>
-</button>{" "}
+                >
+                  Logout
+                  <IoLogOut className="ml-2" />
+                </button>{" "}
               </div>
             )}
             <ThemeToggle />
@@ -310,59 +324,69 @@ export default function Navbar() {
                           <BiSolidRightArrow className="ml-auto" />
                         </Link>
                         {!isLoggedIn ? (
-                      <>
-                        <div className="flex flex-col sm:flex-row gap-4 sm:gap-2">
-                          <Link
-                            href="/login"
-                            onClick={() =>
-                              document
-                                .querySelector('[data-state="open"]')
-                                ?.click()
-                            }
-                          >
-                            <Button
-                              variant="outline"
-                              className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 dark:from-blue-600 dark:to-cyan-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-blue-400 dark:border-blue-500 backdrop-blur-sm w-full sm:w-auto hover:text-white"
-                            >
-                              <span className="flex items-center justify-center">
-                                💻 Login
-                              </span>
-                            </Button>
-                          </Link>
-                          <Link
-                            href="/signup"
-                            onClick={() =>
-                              document
-                                .querySelector('[data-state="open"]')
-                                ?.click()
-                            }
-                          >
-                            <Button
-                              variant="outline"
-                              className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white"
-                            >
-                              <span className="flex items-center justify-center">
-                                🔐 Signup
-                              </span>
-                            </Button>
-                          </Link>
-                        </div>
-                        </>
+                          <>
+                            <div className="flex flex-col sm:flex-row gap-4 sm:gap-2">
+                              <Link
+                                href="/login"
+                                onClick={() =>
+                                  document
+                                    .querySelector('[data-state="open"]')
+                                    ?.click()
+                                }
+                              >
+                                <Button
+                                  variant="outline"
+                                  className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 dark:from-blue-600 dark:to-cyan-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-blue-400 dark:border-blue-500 backdrop-blur-sm w-full sm:w-auto hover:text-white"
+                                >
+                                  <span className="flex items-center justify-center">
+                                    💻 Login
+                                  </span>
+                                </Button>
+                              </Link>
+                              <Link
+                                href="/signup"
+                                onClick={() =>
+                                  document
+                                    .querySelector('[data-state="open"]')
+                                    ?.click()
+                                }
+                              >
+                                <Button
+                                  variant="outline"
+                                  className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white"
+                                >
+                                  <span className="flex items-center justify-center">
+                                    🔐 Signup
+                                  </span>
+                                </Button>
+                              </Link>
+                            </div>
+                          </>
                         ) : (
                           <div className="flex items-center gap-2">
                             {userRole === "admin" ? (
                               <Link href="/adminDashboard">
                                 {" "}
-                                <span className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2 flex items-center">Admin<RiAdminFill className="ml-2"/></span>{" "}
+                                <span className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2 flex items-center">
+                                  Admin
+                                  <RiAdminFill className="ml-2" />
+                                </span>{" "}
                               </Link>
                             ) : (
                               <Link href="/dashboard">
                                 {" "}
-                                <span className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2 flex items-center">Dashboard<MdDashboardCustomize className="ml-2" /></span>{" "}
+                                <span className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2 flex items-center">
+                                  Dashboard
+                                  <MdDashboardCustomize className="ml-2" />
+                                </span>{" "}
                               </Link>
                             )}
-                            <button onClick={logout} className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2 flex items-center">
-                            Logout<IoLogOut className="ml-2"/>
+                            <button
+                              onClick={logout}
+                              className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border-2 border-cyan-400 dark:border-cyan-500 backdrop-blur-sm w-full sm:w-auto hover:text-white mx-2 flex items-center"
+                            >
+                              Logout
+                              <IoLogOut className="ml-2" />
                             </button>{" "}
                           </div>
                         )}

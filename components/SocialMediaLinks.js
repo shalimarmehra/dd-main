@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 // components/SocialMediaLinks.jsx
 export default function SocialMediaLinks() {
   return (

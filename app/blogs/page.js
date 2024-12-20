@@ -28,7 +28,6 @@ const Page = () => {
   const fetchBlogs = async () => {
     const res = await axios.get("/api/blog");
     setBlogs(res.data.blogs);
-    console.log(res.data.blogs);
   };
 
   useEffect(() => {
