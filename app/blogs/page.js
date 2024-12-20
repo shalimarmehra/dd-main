@@ -109,7 +109,7 @@ const Page = () => {
                   className="w-full h-48 sm:h-56 md:h-64 object-cover transition-transform duration-500 hover:scale-110 rounded-lg shadow-lg hover:shadow-xl"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg" />
-                <div className="absolute top-0 right-0 w-20 h-20 bg-[url('/circuit-pattern.png')] opacity-30 transition-transform duration-300 hover:rotate-12" />
+                <div className="absolute top-0 right-0 w-20 h-20 opacity-30 transition-transform duration-300 hover:rotate-12" />
               </div>
               <div className="p-4 sm:p-6">
                 <h2 className="text-lg sm:text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100 transition-colors hover:text-gray-700 dark:hover:text-gray-300 line-clamp-2 cursor-se-resize">

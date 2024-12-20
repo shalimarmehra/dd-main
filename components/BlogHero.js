@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import Image from "next/image";
 import { FaBookReader } from "react-icons/fa";
 
@@ -45,8 +46,8 @@ const BlogHero = () => {
                 <Image
                   src="/second.jpg"
                   alt="Author"
-                  width={40}
-                  height={40}
+                  width={100}
+                  height={60}
                   className="rounded-full transition-all duration-300 group-hover:scale-110"
                 />
                 <div className="ml-3 transition-transform duration-300 group-hover:translate-x-1">
