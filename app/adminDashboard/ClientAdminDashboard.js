@@ -3,11 +3,14 @@
 // app/adminDashboard/page.js
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use, useRef } from "react";
 import { HiPlus, HiPencil, HiUsers } from "react-icons/hi";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "next/navigation";
+import JoditEditor from "jodit-react";
+import { SiLibreofficewriter } from "react-icons/si";
+import { FaCalendarDays } from "react-icons/fa6";
 
 const AdminDashboard = () => {
   const [mounted, setMounted] = useState(false);
@@ -24,11 +27,41 @@ const AdminDashboard = () => {
     content: "",
   });
   const { post } = useParams();
+  const [blogs, setBlogs] = useState([]);
+
+  const fetchBlogs = async () => {
+    const res = await axios.get("/api/blog");
+    setBlogs(res.data.blogs);
+  };
+
+  const deleteBlog = async (mongoId) => {
+    try {
+      const response = await axios.delete("/api/blog", {
+        params: {
+          id: mongoId,
+        },
+      });
+      if (response.data.success) {
+        toast.success(response.data.msg);
+        fetchBlogs();
+      } else {
+        toast.error("Error deleting post");
+      }
+    } catch (error) {
+      toast.error("Error: " + error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
 
   // useEffect(() => {
   //   setMounted(true);
   //   // Fetch posts and subscribers data here
   // }, []);
+
+  const editor = useRef(null);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -89,15 +122,15 @@ const AdminDashboard = () => {
       >
         <nav>
           <button
-            onClick={() => setActiveTab("posts")}
+            onClick={() => setActiveTab("blogs")}
             className={`flex items-center space-x-2 w-full p-3 rounded ${
-              activeTab === "posts"
+              activeTab === "blogs"
                 ? "bg-white dark:bg-black text-black dark:text-white"
                 : "hover:bg-gray-700 dark:hover:bg-gray-200"
             }`}
           >
             <HiPencil />
-            <span>Posts</span>
+            <span>Published Blogs</span>
           </button>
           <button
             onClick={() => setActiveTab("createPost")}
@@ -127,31 +160,57 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <main className="pt-20 md:pl-64 p-4">
         <div className="max-w-7xl mx-auto">
-          {activeTab === "posts" && (
+          {activeTab === "blogs" && (
             <div>
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold">Published Posts</h2>
+                <h2 className="text-xl font-semibold">Published Blogs</h2>
               </div>
 
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {posts
-                  .filter((post) => post.published)
-                  .map((post) => (
+              <div className="grid gap-4">
+                {blogs
+                  .sort((a, b) => new Date(b.date) - new Date(a.date))
+                  .map((blog) => (
                     <div
-                      key={post.id}
+                      key={blog._id || blog.id}
                       className={`p-4 rounded-lg bg-white dark:bg-black shadow`}
                     >
-                      <h3 className="font-semibold">{post.title}</h3>
+                      <a
+                        href={`/blogs/${blog._id || blog.id}`}
+                        className="hover:text-gray-600 cursor-pointer"
+                      >
+                        <h3 className="font-semibold">{blog.title}</h3>
+                      </a>
+
+                      <div className="flex items-center justify-between w-full">
+  <span className="flex items-center">
+    <SiLibreofficewriter className="mr-2" />
+    By {blog.author}
+  </span>
+  <span className="flex items-center font-mono">
+    <FaCalendarDays className="mr-2" />
+    {new Date(blog.date).toLocaleString()}
+  </span>
+</div>
                       <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                        {post.excerpt}
+                        {blog.excerpt}
                       </p>
                       <div className="flex justify-between items-center mt-4">
-                        <span className="px-2 py-1 rounded text-sm bg-gray-200 text-black">
-                          Published
-                        </span>
-                        <button className="text-black hover:text-gray-600">
-                          Edit
-                        </button>
+                        <div className="flex-grow">
+                          <span className="px-2 py-1 rounded text-sm bg-gray-200 text-black">
+                            Published
+                          </span>
+                        </div>
+                        <div className="flex gap-4">
+                          <button className="text-black hover:text-gray-600 font-bold">
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => deleteBlog(blog._id)}
+                            className="text-black hover:text-red-700 font-bold"
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -255,26 +314,13 @@ const AdminDashboard = () => {
 
                 <div>
                   <label className="block mb-2 font-medium">Content</label>
-                  <textarea
+                  <JoditEditor
+                    ref={editor}
                     className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-black dark:bg-gray-800 h-60"
                     value={data.content}
-                    onChange={(e) =>
-                      setData({ ...data, content: e.target.value })
-                    }
+                    onChange={(value) => setData({ ...data, content: value })}
                     placeholder="Write your post content here..."
                   />
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    className="w-5 h-5 rounded focus:ring-2 focus:ring-black"
-                    checked={data.published}
-                    onChange={(e) =>
-                      setData({ ...data, published: e.target.checked })
-                    }
-                  />
-                  <span className="font-medium">Publish immediately</span>
                 </div>
 
                 <button

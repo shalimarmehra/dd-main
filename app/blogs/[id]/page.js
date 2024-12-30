@@ -72,25 +72,29 @@ const Page = () => {
           </div>
 
           <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 w-full mb-2">
-            <div className="flex items-center">
-            <FaRegUserCircle className="mr-2"/>
-              <p className="break-words">by:- {data.author}</p>
+            <div className="flex items-center font-mono">
+              <FaRegUserCircle className="mr-2" />
+              <p className="break-words">by: {data.author}</p>
             </div>
-            <div className="flex items-center">
-              <p className="break-words">{data.date}</p>
-              <span className="hidden md:inline">•</span>
+            <div className="flex items-center font-mono">
+              <p className="break-words">
+                {new Date(data.date).toLocaleString()}
+              </p>
             </div>
           </div>
           <SimpleDivider type="gradient" />
 
           <div className="prose dark:prose-invert max-w-none w-full">
-            <p className="text-gray-800 dark:text-gray-200 leading-relaxed text-base sm:text-lg">
-              {data.content}
-            </p>
+            <p
+              className="text-gray-800 dark:text-gray-200 leading-relaxed text-base sm:text-lg"
+              dangerouslySetInnerHTML={{ __html: data.content }}
+            />
           </div>
           <SimpleDivider type="dashed" />
           <div className="flex space-x-2 md:space-x-3 mt-8">
-            <h2 className="p-1 md:pt-1.5 font-bold bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 rounded-xl px-4">Share to →</h2>
+            <h2 className="p-1 md:pt-1.5 font-bold bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 rounded-xl px-4">
+              Share to →
+            </h2>
             <a
               href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
                 window.location.href

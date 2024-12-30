@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
@@ -89,125 +90,120 @@ const Page = () => {
 
       <div className="container mx-auto px-4 py-8 transition-colors duration-200">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {blogs?.slice((currentPage - 1) * 6, currentPage * 6).map((blog) => (
-            <div
-              key={blog._id || blog.id}
-              className="bg-white dark:bg-black rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600"
-            >
-              <div className="relative overflow-hidden">
-                <span
-                  className="absolute top-2 left-2 px-4 py-2 text-xs font-semibold rounded-full z-10 text-black bg-white dark:bg-black dark:text-white bg-opacity-70 dark:bg-opacity-70 transition-all duration-300"
-                >
-                  {blog.category}
-                </span>
-                <Image
-                  src={`/${blog.image}`}
-                  width={500}
-                  height={300}
-                  alt={blog.title}
-                  className="w-full h-48 sm:h-56 md:h-64 object-cover transition-transform duration-500 hover:scale-110 rounded-lg shadow-lg hover:shadow-xl"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg" />
-                <div className="absolute top-0 right-0 w-20 h-20 opacity-30 transition-transform duration-300 hover:rotate-12" />
-              </div>
-              <div className="p-4 sm:p-6">
-                <h2 className="text-lg sm:text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100 transition-colors hover:text-gray-700 dark:hover:text-gray-300 line-clamp-2 cursor-se-resize">
-                  {blog.title}
-                </h2>
-                <div className="flex flex-wrap items-center mb-3 text-xs sm:text-sm italic text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                  <span className="flex items-center">
-                    <SiLibreofficewriter className="mr-2" />
-                    By {blog.author}
+          {blogs
+            ?.slice((currentPage - 1) * 6, currentPage * 6)
+            .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by date in descending order
+            .map((blog) => (
+              <div
+                key={blog._id || blog.id}
+                className="bg-white dark:bg-black rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600"
+              >
+                <div className="relative overflow-hidden">
+                  <span className="absolute top-2 left-2 px-4 py-2 text-xs font-semibold rounded-full z-10 text-black bg-white dark:bg-black dark:text-white bg-opacity-70 dark:bg-opacity-70 transition-all duration-300">
+                    {blog.category}
                   </span>
-                  <span className="mx-2">•</span>
-                  <span className="flex items-center">
-                    <FaCalendarDays className="mr-2" />
-                    {blog.date}
-                  </span>
-                  <span className="mx-2">•</span>
-                  {/* <span className="flex items-center">
-                <FaEye className="mr-2" />
-                {blog.views} views
-              </span> */}
+                  <Image
+                    src={`/${blog.image}`}
+                    width={500}
+                    height={300}
+                    alt={blog.title}
+                    className="w-full h-48 sm:h-56 md:h-64 object-cover transition-transform duration-500 hover:scale-110 rounded-lg shadow-lg hover:shadow-xl"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg" />
+                  <div className="absolute top-0 right-0 w-20 h-20 opacity-30 transition-transform duration-300 hover:rotate-12" />
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base mb-4 line-clamp-3 transition-colors hover:text-gray-800 dark:hover:text-gray-100 cursor-help">
-                  {blog.excerpt}
-                </p>
-                <div className="h-px w-full bg-gray-500 my-6" />
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 mb-4">
-                  <div className="flex space-x-4">
-                    <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                        />
-                      </svg>
-                      <span>{blog.likes}</span>
-                    </button>
-                    <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-500 dark-blue-400 transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-                        />
-                      </svg>
-                      <span>{blog.comments}</span>
-                    </button>
-                    <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                        />
-                      </svg>
-                    </button>
-                    <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                        />
-                      </svg>
-                    </button>
+                <div className="p-4 sm:p-6">
+                  <h2 className="text-lg sm:text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100 transition-colors hover:text-gray-700 dark:hover:text-gray-300 line-clamp-2 cursor-se-resize">
+                    {blog.title}
+                  </h2>
+                  <div className="flex flex-wrap items-center mb-3 text-xs sm:text-sm italic text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors justify-between">
+                    <span className="flex items-center">
+                      <SiLibreofficewriter className="mr-2" />
+                      By {blog.author}
+                    </span>
+                    <span className="flex items-center font-mono">
+                      <FaCalendarDays className="mr-2" />
+                      {new Date(blog.date).toLocaleString()}
+                    </span>
                   </div>
-                  <Link href={`/blogs/${blog._id}`}>
-                  <button className="w-full sm:w-auto bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 dark:focus:ring-gray-100">
-                    Read More
-                  </button>
-                  </Link>
+                  {/* <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base mb-4 line-clamp-3 transition-colors hover:text-gray-800 dark:hover:text-gray-100 cursor-help">
+            {blog.excerpt}
+          </p> */}
+                  <div className="h-px w-full bg-gray-500 my-6" />
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 mb-4">
+                    <div className="flex space-x-4">
+                      <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors">
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                          />
+                        </svg>
+                        <span>{blog.likes}</span>
+                      </button>
+                      <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-500 dark-blue-400 transition-colors">
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                          />
+                        </svg>
+                        <span>{blog.comments}</span>
+                      </button>
+                      <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                          />
+                        </svg>
+                      </button>
+                      <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors">
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <Link href={`/blogs/${blog._id}`}>
+                      <button className="w-full sm:w-auto bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 dark:focus:ring-gray-100">
+                        Read More
+                      </button>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
         <Pagination className="mt-8 cursor-pointer">
@@ -258,9 +254,9 @@ const Page = () => {
             </PaginationItem>
           </PaginationContent>
         </Pagination>
-        <div className="w-full h-px bg-gray-300 opacity-50 my-5"></div>
-        <NewsLetterCTA />
       </div>
+      <div className="w-full h-px bg-gray-300 opacity-50 my-5"></div>
+      <NewsLetterCTA />
     </div>
   );
 };
