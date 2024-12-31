@@ -1,30 +1,64 @@
+/* eslint-disable react/react-in-jsx-scope */
 "use client";
+import axios from "axios";
 import { useState } from "react";
 import { MdTipsAndUpdates, MdUnsubscribe } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const NewsLetterCTA = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("");
+  const [errors, setErrors] = useState({});
 
-  const handleSubmit = async (e) => {
+  const validateForm = () => {
+    const newErrors = {};
+    if (!email) {
+      newErrors.email = "Email is required";
+    } else if (!/^[a-zA-Z0-9._-]+@gmail\.com$/.test(email)) {
+      const issues = [];
+      if (email.length > 254) issues.push("Email is too long");
+      if (!/^[a-zA-Z0-9._-]+/.test(email))
+        issues.push("Invalid characters before @");
+      if (!/^[^@]+@[^@]+$/.test(email))
+        issues.push("Multiple @ symbols found");
+      if (!/@gmail\.com$/.test(email))
+        issues.push("Only gmail.com domain is allowed");
+      if (/@.*\..{2,}$/.test(email) && !/^.{1,64}@/.test(email))
+        issues.push("Local part exceeds 64 characters");
+      newErrors.email = issues.length
+        ? issues.join(". ")
+        : "Email format is invalid";
+    }
+    return newErrors;
+  };
+
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
+
+    const validationErrors = validateForm();
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("email", email);
     setStatus("sending");
 
     try {
       // Replace with your actual API endpoint
-      const response = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      const response = await axios.post("/api/email", formData);
 
-      if (response.ok) {
+      if (response.status === 200) {
+        toast.success("Thank you for subscribing!");
         setStatus("success");
         setEmail("");
       } else {
+        toast.error("Something went wrong. Please try again.");
         setStatus("error");
       }
-    } catch (error) {
+    } catch {
+      toast.error("Something went wrong. Please try again.");
       setStatus("error");
     }
   };
@@ -67,7 +101,7 @@ const NewsLetterCTA = () => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
+          <form onSubmit={onSubmitHandler} className="w-full max-w-2xl mx-auto">
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <input
                 type="email"
@@ -80,7 +114,9 @@ const NewsLetterCTA = () => {
     focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
     dark:bg-gray-800 dark:border-gray-600 dark:text-white
     dark:placeholder-gray-400
-    transition-all duration-200 ease-in-out`}
+    transition-all duration-200 ease-in-out ${
+      errors.email ? "border-red-500" : ""
+    }`}
               />
 
               <button
@@ -106,7 +142,9 @@ const NewsLetterCTA = () => {
                 {status === "sending" ? "Subscribing..." : "Subscribe"}
               </button>
             </div>
-
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-2">{errors.email}</p>
+            )}
             {status === "success" && (
               <p className="mt-4 text-sm sm:text-base text-green-600 dark:text-green-400 text-center transition-colors duration-200">
                 Thank you for subscribing!

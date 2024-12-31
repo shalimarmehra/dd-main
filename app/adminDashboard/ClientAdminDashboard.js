@@ -11,11 +11,10 @@ import { useParams } from "next/navigation";
 import JoditEditor from "jodit-react";
 import { SiLibreofficewriter } from "react-icons/si";
 import { FaCalendarDays } from "react-icons/fa6";
+import { RiDeleteBin5Fill } from "react-icons/ri";
 
 const AdminDashboard = () => {
   const [mounted, setMounted] = useState(false);
-  const [posts, setPosts] = useState([]);
-  const [subscribers, setSubscribers] = useState([]);
   const [activeTab, setActiveTab] = useState("posts");
   const [data, setData] = useState({
     category: "",
@@ -28,6 +27,7 @@ const AdminDashboard = () => {
   });
   const { post } = useParams();
   const [blogs, setBlogs] = useState([]);
+  const [emails, setEmails] = useState([]);
 
   const fetchBlogs = async () => {
     const res = await axios.get("/api/blog");
@@ -56,10 +56,20 @@ const AdminDashboard = () => {
     fetchBlogs();
   }, []);
 
-  // useEffect(() => {
-  //   setMounted(true);
-  //   // Fetch posts and subscribers data here
-  // }, []);
+  const fetchEmails = async () => {
+    try {
+      const res = await axios.get("/api/email");
+      setEmails(res.data.emails);
+    } catch (error) {
+      console.error("Error fetching emails:", error);
+      toast.error("Error fetching subscriber emails.");
+    }
+  };
+
+  useEffect(() => {
+    // setMounted(true);
+    fetchEmails();
+  }, []);
 
   const editor = useRef(null);
 
@@ -182,15 +192,15 @@ const AdminDashboard = () => {
                       </a>
 
                       <div className="flex items-center justify-between w-full">
-  <span className="flex items-center">
-    <SiLibreofficewriter className="mr-2" />
-    By {blog.author}
-  </span>
-  <span className="flex items-center font-mono">
-    <FaCalendarDays className="mr-2" />
-    {new Date(blog.date).toLocaleString()}
-  </span>
-</div>
+                        <span className="flex items-center">
+                          <SiLibreofficewriter className="mr-2" />
+                          By {blog.author}
+                        </span>
+                        <span className="flex items-center font-mono">
+                          <FaCalendarDays className="mr-2" />
+                          {new Date(blog.date).toLocaleString()}
+                        </span>
+                      </div>
                       <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                         {blog.excerpt}
                       </p>
@@ -344,30 +354,30 @@ const AdminDashboard = () => {
                     <tr>
                       <th className="px-6 py-3 text-left">Email</th>
                       <th className="px-6 py-3 text-left">Date Subscribed</th>
-                      <th className="px-6 py-3 text-left">Status</th>
+                      <th className="px-6 py-3 text-left">Delete</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {subscribers.map((subscriber) => (
-                      <tr
-                        key={subscriber.id}
-                        className="border-t dark:border-gray-700"
-                      >
-                        <td className="px-6 py-4">{subscriber.email}</td>
-                        <td className="px-6 py-4">{subscriber.date}</td>
-                        <td className="px-6 py-4">
-                          <span
-                            className={`px-2 py-1 rounded text-sm ${
-                              subscriber.active
-                                ? "bg-gray-200 text-black"
-                                : "bg-gray-100 text-gray-800"
-                            }`}
-                          >
-                            {subscriber.active ? "Active" : "Inactive"}
-                          </span>
+                    {emails && emails.length > 0 ? (
+                      emails.map((item) => (
+                        <tr
+                          key={item._id || item.id}
+                          className="border-t dark:border-gray-700"
+                        >
+                          <td className="px-6 py-4">{item.email}</td>
+                          <td className="px-6 py-4">{new Date(item.date).toLocaleString()}</td>
+                          <td className="px-8 py-4">
+                          <RiDeleteBin5Fill className="hover:text-red-600"/>
+                            </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="3" className="px-6 py-4 text-center">
+                          No subscribers found.
                         </td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               </div>

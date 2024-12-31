@@ -6,10 +6,13 @@ import SocialProof from "@/components/SocialProof";
 import NewsLetterCTA from "@/components/NewsLetterCTA";
 import ScrollToTop from "@/components/ScrollToTop";
 import BlogsCard from "@/components/BlogsCard";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   return (
     <div>
+      <ToastContainer/>
       <ScrollToTop/>
       <Hero />
       <SimpleDivider type="gradient" />

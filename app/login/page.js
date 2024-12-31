@@ -1,11 +1,11 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { MdLogin } from "react-icons/md";
 import toast, { Toaster } from "react-hot-toast";
 import { useAuth } from "../auth/AuthContext";
 
-export default function LoginPage() {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,7 +23,7 @@ export default function LoginPage() {
       } else {
         router.push("/dashboard");
       }
-    } catch (err) {
+    } catch {
       setError("Invalid email or password");
     }
   };
@@ -134,4 +134,6 @@ export default function LoginPage() {
       </div>
     </div>
   );
-}
+};
+
+export default LoginPage;
