@@ -1,16 +1,33 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosTrendingUp } from "react-icons/io";
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import AOS from "aos";
+import "aos/dist/aos.css";
+import SimpleDivider from "./SimpleDivider";
+import axios from "axios";
 
 const BlogsCard = () => {
+  const [blogs, setBlogs] = useState([]);
+
+  const fetchBlogs = async () => {
+    try {
+      const res = await axios.get("/api/blog");
+      setBlogs(res.data.blogs);
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
   useEffect(() => {
     AOS.init({
       duration: 1000,
-      easing: 'ease-in-out',
+      easing: "ease-in-out",
       once: true,
     });
   }, []);
@@ -29,51 +46,33 @@ const BlogsCard = () => {
           curve.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 w-[95%] mx-auto my-10">
-        {[1, 2, 3].map((item) => (
+      <SimpleDivider type="gradient" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-[90%] md:w-[80%] mx-auto my-10">
+        {blogs.slice(1, 3).map((blog) => (
           <Link
-            href={`/blog/${item}`}
-            key={item}
+            href={`/blogs/${blog._id || blog.id}`}
+            key={blog._id || blog.id}
             className="cursor-pointer group"
             data-aos="fade-up"
-            data-aos-delay={item * 100}
           >
             <div className="bg-white dark:bg-black rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border-2 border-gradient-to-r from-pink-500 via-purple-500 to-blue-500">
               <div className="relative overflow-hidden aspect-video">
-                <span
-                  className="absolute top-2 left-2 px-2 py-1 text-xs font-semibold rounded-full z-10"
-                  style={{
-                    backgroundColor:
-                      item % 3 === 0
-                        ? "#FF6B6B"
-                        : item % 3 === 1
-                        ? "#4ECDC4"
-                        : "#FFD93D",
-                  }}
-                >
-                  {item % 3 === 0
-                    ? "Technology"
-                    : item % 3 === 1
-                    ? "Lifestyle"
-                    : "Business"}
-                </span>
                 <Image
-                  src={`/fourth.jpg`}
+                  src={`/${blog.image}`}
                   width={500}
-                  height={500}
-                  alt="Blog post"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  height={300}
+                  alt={blog.title}
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110 rounded-lg shadow-lg hover:shadow-xl"
                 />
                 {/* Instagram-like gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
                 {/* Content overlay on hover */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h2 className="text-lg font-bold text-white mb-2 drop-shadow-lg">
-                    Blog Post Title
+                  <h2 className="text-sm md:text-lg font-bold text-white mb-2 drop-shadow-lg">
+                  {blog.title}
                   </h2>
                   <div className="flex items-center text-sm text-white/90">
-                    <span className="flex items-center">
+                    <span className="flex items-center font-mono">
                       <svg
                         className="w-4 h-4 mr-1"
                         fill="currentColor"
@@ -86,10 +85,14 @@ const BlogsCard = () => {
                           clipRule="evenodd"
                         />
                       </svg>
-                      1.2k views
+                      &nbsp;By {blog.author}
                     </span>
                     <span className="mx-2">•</span>
-                    <span>Read More</span>
+                    <span
+                    className="cursor-pointer border-b border-dashed border-white/50 hover:border-white transition-colors duration-300"
+                    >
+                    Read More
+                    </span>
                   </div>
                 </div>
               </div>

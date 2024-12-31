@@ -19,13 +19,37 @@ import { MdArticle } from "react-icons/md";
 import ScrollToTop from "@/components/ScrollToTop";
 import NewsLetterCTA from "@/components/NewsLetterCTA";
 import axios from "axios";
+import SimpleDivider from "@/components/SimpleDivider";
+import BlogsCard from "@/components/BlogsCard";
 
 const Page = () => {
   const [theme, setTheme] = useState("light");
   const [currentPage, setCurrentPage] = useState(1);
-  const { menu, setMenu } = useState("All");
   const [blogs, setBlogs] = useState([]);
 
+  const [bookmarkedBlogs, setBookmarkedBlogs] = useState([]);
+
+  useEffect(() => {
+    const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+    setBookmarkedBlogs(bookmarks);
+  }, []);
+
+  const isBookmarked = (mongoId) => {
+    return bookmarkedBlogs.some(item => item._id === mongoId);
+  };
+
+  const toggleBookmark = (blog) => {
+    if (isBookmarked(blog._id)) {
+      const newBookmarks = bookmarkedBlogs.filter(item => item._id !== blog._id);
+      localStorage.setItem('bookmarks', JSON.stringify(newBookmarks));
+      setBookmarkedBlogs(newBookmarks);
+    } else {
+      const newBookmarks = [...bookmarkedBlogs, {_id: blog._id, title: blog.title}]; // Assuming you want to store _id and title
+      localStorage.setItem('bookmarks', JSON.stringify(newBookmarks));
+      setBookmarkedBlogs(newBookmarks);
+    }
+  };
+  
   const fetchBlogs = async () => {
     const res = await axios.get("/api/blog");
     setBlogs(res.data.blogs);
@@ -41,6 +65,23 @@ const Page = () => {
     }
   }, []);
 
+  const handleShare = async (blog) => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: blog.title,
+          text: blog.description,
+          url: `${window.location.origin}/blogs/${blog._id}`,
+        });
+        console.log("Post shared successfully");
+      } catch (error) {
+        console.error("Error sharing the post:", error);
+      }
+    } else {
+      alert("Web Share API is not supported in your browser.");
+    }
+  };
+
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
@@ -55,7 +96,7 @@ const Page = () => {
           <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 dark:bg-gray-100 group-hover:w-full transition-all duration-300 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"></span>
         </span>
       </h1>
-      <BlogHero />
+      {/* <BlogHero /> */}
 
       {/* <div className="w-full lg:w-[90%] mx-auto lg:block transform hover:-translate-y-2 hover:scale-80 transition-all duration-300 ease-in-out mt-5 py-4">
         <div className="sticky top-4">
@@ -88,6 +129,7 @@ const Page = () => {
         </div>
       </div> */}
 
+      {/* Blogs */}
       <div className="container mx-auto px-4 py-8 transition-colors duration-200">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {blogs
@@ -126,80 +168,86 @@ const Page = () => {
                       {new Date(blog.date).toLocaleString()}
                     </span>
                   </div>
-                  {/* <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base mb-4 line-clamp-3 transition-colors hover:text-gray-800 dark:hover:text-gray-100 cursor-help">
-            {blog.excerpt}
-          </p> */}
+                  <p className="text-xs sm:text-sm font-['Open_Sans'] text-gray-500 dark:text-gray-400 mt-3 sm:mt-4 line-clamp-2">
+                    {blog.description}
+                  </p>
                   <div className="h-px w-full bg-gray-500 my-6" />
-                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 mb-4">
-                    <div className="flex space-x-4">
-                      <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors">
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                  <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 mb-4">
+                    <div className="grid grid-cols-2 gap-14 xl:gap-20">
+                      <div className="flex space-x-5">
+                        <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors">
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                            />
+                          </svg>
+                          <span>{blog.likes}</span>
+                        </button>
+                        <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-500 dark-blue-400 transition-colors">
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                            />
+                          </svg>
+                          <span>{blog.comments}</span>
+                        </button>
+                        <button onClick={toggleBookmark} className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                            />
+                          </svg>
+                          {/* {isBookmarked ? 'Remove Bookmark' : 'Bookmark'} */}
+                        </button>
+                        <button
+                          onClick={() => handleShare(blog)}
+                          className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                          />
-                        </svg>
-                        <span>{blog.likes}</span>
-                      </button>
-                      <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-500 dark-blue-400 transition-colors">
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-                          />
-                        </svg>
-                        <span>{blog.comments}</span>
-                      </button>
-                      <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                          />
-                        </svg>
-                      </button>
-                      <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors">
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                          />
-                        </svg>
-                      </button>
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <Link href={`/blogs/${blog._id}`}>
+                        <button className="w-full sm:w-auto bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 dark:focus:ring-gray-100">
+                          Read More
+                        </button>
+                      </Link>
                     </div>
-                    <Link href={`/blogs/${blog._id}`}>
-                      <button className="w-full sm:w-auto bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 dark:focus:ring-gray-100">
-                        Read More
-                      </button>
-                    </Link>
                   </div>
                 </div>
               </div>
@@ -257,6 +305,9 @@ const Page = () => {
       </div>
       <div className="w-full h-px bg-gray-300 opacity-50 my-5"></div>
       <NewsLetterCTA />
+      <SimpleDivider type="gradient" />
+      <BlogsCard />
+      <SimpleDivider type="gradient" />
     </div>
   );
 };

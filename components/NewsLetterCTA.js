@@ -66,7 +66,7 @@ const NewsLetterCTA = () => {
   return (
     <section className="bg-gray-50 dark:bg-black w-full transition-colors duration-400">
       <div
-        className="w-[90%] mx-auto px-4 py-8 sm:px-6 sm:py-12 lg:px-8 opacity-0 translate-y-[50px] transition-all duration-1000 ease-in-out"
+        className="w-[96%] mx-auto px-4 py-8 sm:px-6 sm:py-12 lg:px-8 opacity-0 translate-y-[50px] transition-all duration-1000 ease-in-out"
         ref={(el) => {
           if (el) {
             const observer = new IntersectionObserver(

@@ -7,6 +7,7 @@ import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import axios from "axios";
 import Link from "next/link";
 import { Bookmark } from "lucide-react";
+import { RiArticleFill } from "react-icons/ri";
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -23,6 +24,22 @@ const Blogs = () => {
     }
   };
 
+  const handleShare = async (blog) => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: blog.title,
+          text: blog.description,
+          url: `${window.location.origin}/blogs/${blog._id}`,
+        });
+        console.log("Post shared successfully");
+      } catch (error) {
+        console.error("Error sharing the post:", error);
+      }
+    } else {
+      alert("Web Share API is not supported in your browser.");
+    }
+  };
   useEffect(() => {
     fetchBlogs();
   }, []);
@@ -52,7 +69,7 @@ const Blogs = () => {
             </h2>
           </div>
 
-          <div className="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 mt-6 sm:mt-10">
+          <div className="container mx-auto md:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 mt-6 sm:mt-10">
             {blogs
               .sort((a, b) => new Date(b.date) - new Date(a.date))
               .slice(0, 4)
@@ -79,7 +96,7 @@ const Blogs = () => {
                     <h3 className="text-lg sm:text-xl font-['Poppins'] font-bold text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-blue-400 transition-colors duration-300 line-clamp-2">
                       {blog.title}
                     </h3>
-                    <span className="text-xs sm:text-sm font-['Roboto'] block text-gray-400 dark:text-gray-500 mt-2 capitalize italic font-mono">
+                    <span className="text-xs sm:text-sm block text-gray-500 dark:text-gray-400 mt-2 capitalize italic font-mono">
                       {new Date(blog.date).toLocaleString()} | By {blog.author}
                     </span>
                     <p className="text-xs sm:text-sm font-['Open_Sans'] text-gray-500 dark:text-gray-400 mt-3 sm:mt-4 line-clamp-2">
@@ -96,15 +113,40 @@ const Blogs = () => {
                         </span>
                         <FaArrowUpRightFromSquare className="text-sm sm:text-base" />
                       </Link>
-
-                      <span className="mt-3 sm:mt-4 hover:text-gray-600 hover:scale-110 transition duration-300 ease-in-out">
-                        <Bookmark className="text-sm sm:text-base" />
+                      <span className="flex mt-3 sm:mt-4 hover:text-gray-600 hover:scale-110 transition duration-300 ease-in-out">
+                      <button
+                          onClick={() => handleShare(blog)}
+                          className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                            />
+                          </svg>
+                        </button>
+                        <Bookmark className="ml-4 text-sm sm:text-base" />
                       </span>
                     </div>
                   </div>
                 </div>
               ))}
           </div>
+          <div className="items-center mt-8 flex justify-center">
+  <Link href="/blogs">
+    <button className="bg-black hover:bg-gray-700 dark:bg-white dark:hover:bg-gray-300 text-white dark:text-black font-bold py-2 px-4 rounded-xl flex items-center transform hover:scale-105 transition duration-500 ease-in-out">
+      <span>SEE MORE BLOGS</span>
+      <RiArticleFill className="ml-2"/>
+    </button>
+  </Link>
+</div>
         </div>
       </div>
 

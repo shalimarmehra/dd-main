@@ -24,7 +24,7 @@ import { AuthProvider } from "./auth/AuthContext";
 
 // export const metadata = {
 //   title: "Tech Dossier",
-//   description: "Tech & Evelopment Blog Website",
+//   description: "Tech & Development Blog Website",
 // };
 
 export default function RootLayout({ children }) {

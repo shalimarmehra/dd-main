@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable react/react-in-jsx-scope */
 import Image from "next/image";
 import { FaBookReader } from "react-icons/fa";

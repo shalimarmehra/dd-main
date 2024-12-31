@@ -71,6 +71,20 @@ const AdminDashboard = () => {
     fetchEmails();
   }, []);
 
+  const deleteEmail = async (mongoId) =>{
+    const response = await axios.delete("/api/email", {
+      params: {
+        id: mongoId,
+      },
+    });
+    if (response.data.success) {
+      toast.success(response.data.msg);
+      fetchEmails();
+    } else {
+      toast.error("Error deleting email");
+    }
+  }
+
   const editor = useRef(null);
 
   const onSubmitHandler = async (e) => {
@@ -365,8 +379,8 @@ const AdminDashboard = () => {
                           className="border-t dark:border-gray-700"
                         >
                           <td className="px-6 py-4">{item.email}</td>
-                          <td className="px-6 py-4">{new Date(item.date).toLocaleString()}</td>
-                          <td className="px-8 py-4">
+                          <td className="px-6 py-4 font-mono">{new Date(item.date).toLocaleString()}</td>
+                          <td className="px-8 py-4" onClick={() => deleteEmail(item._id)}>
                           <RiDeleteBin5Fill className="hover:text-red-600"/>
                             </td>
                         </tr>
