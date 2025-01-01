@@ -14,42 +14,49 @@ import Link from "next/link";
 import BlogHero from "@/components/BlogHero";
 import { SiLibreofficewriter } from "react-icons/si";
 import { FaCalendarDays } from "react-icons/fa6";
-import { FaEye, FaLayerGroup } from "react-icons/fa";
+import { FaEye, FaLayerGroup, FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { MdArticle } from "react-icons/md";
 import ScrollToTop from "@/components/ScrollToTop";
 import NewsLetterCTA from "@/components/NewsLetterCTA";
 import axios from "axios";
 import SimpleDivider from "@/components/SimpleDivider";
 import BlogsCard from "@/components/BlogsCard";
+import { useAuth } from "@/app/auth/AuthContext";
 
 const Page = () => {
+  const { isLoggedIn, userRole, logout } = useAuth(); // Get user data from context
   const [theme, setTheme] = useState("light");
   const [currentPage, setCurrentPage] = useState(1);
   const [blogs, setBlogs] = useState([]);
-
   const [bookmarkedBlogs, setBookmarkedBlogs] = useState([]);
 
   useEffect(() => {
-    const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+    const bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
     setBookmarkedBlogs(bookmarks);
   }, []);
 
-  const isBookmarked = (mongoId) => {
-    return bookmarkedBlogs.some(item => item._id === mongoId);
+  const isBookmarked = (blogId) => {
+    return bookmarkedBlogs.some((item) => item === blogId);
   };
 
-  const toggleBookmark = (blog) => {
-    if (isBookmarked(blog._id)) {
-      const newBookmarks = bookmarkedBlogs.filter(item => item._id !== blog._id);
-      localStorage.setItem('bookmarks', JSON.stringify(newBookmarks));
-      setBookmarkedBlogs(newBookmarks);
+  const toggleBookmark = (blogId) => {
+    if (userRole === "user" || userRole === "admin") {
+      // Check if user is logged in and has 'user' or 'admin' role
+      if (isBookmarked(blogId)) {
+        const newBookmarks = bookmarkedBlogs.filter((id) => id !== blogId);
+        localStorage.setItem("bookmarks", JSON.stringify(newBookmarks));
+        setBookmarkedBlogs(newBookmarks);
+      } else {
+        const newBookmarks = [...bookmarkedBlogs, blogId];
+        localStorage.setItem("bookmarks", JSON.stringify(newBookmarks));
+        setBookmarkedBlogs(newBookmarks);
+      }
     } else {
-      const newBookmarks = [...bookmarkedBlogs, {_id: blog._id, title: blog.title}]; // Assuming you want to store _id and title
-      localStorage.setItem('bookmarks', JSON.stringify(newBookmarks));
-      setBookmarkedBlogs(newBookmarks);
+      // Handle cases where the user is not authorized to bookmark
+      //  e.g., show an error message or redirect to login
     }
   };
-  
+
   const fetchBlogs = async () => {
     const res = await axios.get("/api/blog");
     setBlogs(res.data.blogs);
@@ -96,45 +103,12 @@ const Page = () => {
           <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 dark:bg-gray-100 group-hover:w-full transition-all duration-300 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"></span>
         </span>
       </h1>
-      {/* <BlogHero /> */}
 
-      {/* <div className="w-full lg:w-[90%] mx-auto lg:block transform hover:-translate-y-2 hover:scale-80 transition-all duration-300 ease-in-out mt-5 py-4">
-        <div className="sticky top-4">
-          <div className="bg-white dark:bg-black p-4 md:p-6 rounded-lg shadow-lg transition-all duration-300 hover:shadow-2xl">
-            <h3 className="flex items-center justify-center gap-2 text-lg md:text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 transition-colors duration-300 animate-fadeIn text-center uppercase font-poppins tracking-[0.1em] relative group">
-              <FaLayerGroup className="text-xl" />
-              <span className="relative">
-                Select Category
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-800 dark:bg-gray-200 group-hover:w-full transition-all duration-300"></span>
-              </span>
-            </h3>
-            <select className="w-full bg-white dark:bg-gray-700 border border-gray-500 dark:border-black rounded-md py-2 px-3 text-gray-600 dark:text-gray-400 hover:border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all duration-300 animate-slideIn">
-              <option onClick={() => setMenu("All")} value="">
-                All Category
-              </option>
-              <option onClick={() => setMenu("Technology")} value="technology">
-                Technology
-              </option>
-              <option onClick={() => setMenu("Design")} value="design">
-                Design
-              </option>
-              <option onClick={() => setMenu("Business")} value="business">
-                Business
-              </option>
-              <option onClick={() => setMenu("Lifestyle")} value="lifestyle">
-                Lifestyle
-              </option>
-            </select>
-          </div>
-        </div>
-      </div> */}
-
-      {/* Blogs */}
       <div className="container mx-auto px-4 py-8 transition-colors duration-200">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {blogs
             ?.slice((currentPage - 1) * 6, currentPage * 6)
-            .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by date in descending order
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
             .map((blog) => (
               <div
                 key={blog._id || blog.id}
@@ -207,22 +181,41 @@ const Page = () => {
                           </svg>
                           <span>{blog.comments}</span>
                         </button>
-                        <button onClick={toggleBookmark} className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">
-                          <svg
-                            className="w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                        {userRole === "user" ? (
+                          <button
+                            onClick={() => toggleBookmark(blog._id)}
+                            className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-300 dark:hover:text-blue-300 transition-colors"
+                            disabled={!userRole || !userRole === "loggedIn"}
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                            <FaBookmark
+                              className={`w-4 h-4 ${
+                                isBookmarked(blog._id) ? "text-blue-600" : ""
+                              }`}
                             />
-                          </svg>
-                          {/* {isBookmarked ? 'Remove Bookmark' : 'Bookmark'} */}
-                        </button>
+                          </button>
+                        ) : userRole === "admin" ? (
+                          <button
+                            onClick={() => toggleBookmark(blog._id)}
+                            className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-300 dark:hover:text-blue-300 transition-colors"
+                            disabled={!userRole || !userRole === "loggedIn"}
+                          >
+                            <FaBookmark
+                              className={`w-4 h-4 ${
+                                isBookmarked(blog._id) ? "text-blue-600" : ""
+                              }`}
+                            />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => toggleBookmark(blog._id)}
+                            className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-300 dark:hover:text-blue-300 transition-colors"
+                            disabled={!userRole || !userRole === "loggedIn"}
+                          >
+                            <a href="/login">
+                              <FaBookmark className={`w-4 h-4`} />
+                            </a>
+                          </button>
+                        )}
                         <button
                           onClick={() => handleShare(blog)}
                           className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors"

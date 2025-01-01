@@ -1,13 +1,14 @@
 // app/dashboard/page.js
-import React, { useEffect, useState } from "react";
+import React from "react";
+// import React, { useEffect, useState } from "react";
 
 const Dashboard = () => {
-  const [bookmarks, setBookmarks] = useState([]);
+  // const [bookmarks, setBookmarks] = useState([]);
 
-  useEffect(() => {
-    const savedBookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
-    setBookmarks(savedBookmarks);
-  }, []);
+  // useEffect(() => {
+  //   const savedBookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+  //   setBookmarks(savedBookmarks);
+  // }, []);
 
   return (
   <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white">
@@ -28,9 +29,9 @@ const Dashboard = () => {
               <th scope="col" className="px-4 py-2 text-center">
                 Bookmarked Blogs
                 <div className="space-y-4">
-        {bookmarks.map(blog => (
+        {/* {bookmarks.map(blog => (
           <Blog key={blog.id} blog={blog} />
-        ))}
+        ))} */}
       </div>
               </th>
             </tr>
