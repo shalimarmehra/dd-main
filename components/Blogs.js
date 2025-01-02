@@ -8,10 +8,41 @@ import axios from "axios";
 import Link from "next/link";
 import { Bookmark } from "lucide-react";
 import { RiArticleFill } from "react-icons/ri";
+import { FaBookmark } from "react-icons/fa";
+import { useAuth } from "@/app/auth/AuthContext";
 
 const Blogs = () => {
+  const { isLoggedIn, userRole, logout } = useAuth(); // Get user data from context
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [bookmarkedBlogs, setBookmarkedBlogs] = useState([]);
+
+  useEffect(() => {
+    const bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
+    setBookmarkedBlogs(bookmarks);
+  }, []);
+
+  const isBookmarked = (blogId) => {
+    return bookmarkedBlogs.some((item) => item === blogId);
+  };
+
+  const toggleBookmark = (blogId) => {
+    if (userRole === "user" || userRole === "admin") {
+      // Check if user is logged in and has 'user' or 'admin' role
+      if (isBookmarked(blogId)) {
+        const newBookmarks = bookmarkedBlogs.filter((id) => id !== blogId);
+        localStorage.setItem("bookmarks", JSON.stringify(newBookmarks));
+        setBookmarkedBlogs(newBookmarks);
+      } else {
+        const newBookmarks = [...bookmarkedBlogs, blogId];
+        localStorage.setItem("bookmarks", JSON.stringify(newBookmarks));
+        setBookmarkedBlogs(newBookmarks);
+      }
+    } else {
+      // Handle cases where the user is not authorized to bookmark
+      //  e.g., show an error message or redirect to login
+    }
+  };
 
   const fetchBlogs = async () => {
     try {
@@ -77,10 +108,10 @@ const Blogs = () => {
                 <div
                   key={blog._id || blog.id}
                   className="flex flex-col bg-white dark:bg-gray-800 cursor-pointer rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-500 ease-in-out animate-slideUp"
-                  style={{ 
+                  style={{
                     fontFamily: "'Poppins', sans-serif",
                     animation: `fadeIn 0.5s ease-out ${index * 0.2}s forwards`,
-                    opacity: 0
+                    opacity: 0,
                   }}
                 >
                   <div className="relative h-48 sm:h-64 overflow-hidden">
@@ -114,9 +145,9 @@ const Blogs = () => {
                         <FaArrowUpRightFromSquare className="text-sm sm:text-base" />
                       </Link>
                       <span className="flex mt-3 sm:mt-4 hover:text-gray-600 hover:scale-110 transition duration-300 ease-in-out">
-                      <button
+                        <button
                           onClick={() => handleShare(blog)}
-                          className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors"
+                          className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors mr-4"
                         >
                           <svg
                             className="w-5 h-5"
@@ -132,7 +163,41 @@ const Blogs = () => {
                             />
                           </svg>
                         </button>
-                        <Bookmark className="ml-4 text-sm sm:text-base" />
+                        {userRole === "user" ? (
+                          <button
+                            onClick={() => toggleBookmark(blog._id)}
+                            className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-300 dark:hover:text-blue-300 transition-colors"
+                            disabled={!userRole || !userRole === "loggedIn"}
+                          >
+                            <FaBookmark
+                              className={`w-5 h-5 ${
+                                isBookmarked(blog._id) ? "text-blue-600" : ""
+                              }`}
+                            />
+                          </button>
+                        ) : userRole === "admin" ? (
+                          <button
+                            onClick={() => toggleBookmark(blog._id)}
+                            className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-300 dark:hover:text-blue-300 transition-colors"
+                            disabled={!userRole || !userRole === "loggedIn"}
+                          >
+                            <FaBookmark
+                              className={`w-4 h-4 ${
+                                isBookmarked(blog._id) ? "text-blue-600" : ""
+                              }`}
+                            />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => toggleBookmark(blog._id)}
+                            className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-300 dark:hover:text-blue-300 transition-colors"
+                            disabled={!userRole || !userRole === "loggedIn"}
+                          >
+                            <a href="/login">
+                              <FaBookmark className={`w-5 h-5`} />
+                            </a>
+                          </button>
+                        )}
                       </span>
                     </div>
                   </div>
@@ -140,13 +205,13 @@ const Blogs = () => {
               ))}
           </div>
           <div className="items-center mt-8 flex justify-center">
-  <Link href="/blogs">
-    <button className="bg-black hover:bg-gray-700 dark:bg-white dark:hover:bg-gray-300 text-white dark:text-black font-bold py-2 px-4 rounded-xl flex items-center transform hover:scale-105 transition duration-500 ease-in-out">
-      <span>SEE MORE BLOGS</span>
-      <RiArticleFill className="ml-2"/>
-    </button>
-  </Link>
-</div>
+            <Link href="/blogs">
+              <button className="bg-black hover:bg-gray-700 dark:bg-white dark:hover:bg-gray-300 text-white dark:text-black font-bold py-2 px-4 rounded-xl flex items-center transform hover:scale-105 transition duration-500 ease-in-out">
+                <span>SEE MORE BLOGS</span>
+                <RiArticleFill className="ml-2" />
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
 

@@ -12,6 +12,7 @@ import JoditEditor from "jodit-react";
 import { SiLibreofficewriter } from "react-icons/si";
 import { FaCalendarDays } from "react-icons/fa6";
 import { RiDeleteBin5Fill } from "react-icons/ri";
+import { FaUserShield } from "react-icons/fa";
 
 const AdminDashboard = () => {
   const [mounted, setMounted] = useState(false);
@@ -71,7 +72,7 @@ const AdminDashboard = () => {
     fetchEmails();
   }, []);
 
-  const deleteEmail = async (mongoId) =>{
+  const deleteEmail = async (mongoId) => {
     const response = await axios.delete("/api/email", {
       params: {
         id: mongoId,
@@ -83,7 +84,7 @@ const AdminDashboard = () => {
     } else {
       toast.error("Error deleting email");
     }
-  }
+  };
 
   const editor = useRef(null);
 
@@ -137,8 +138,11 @@ const AdminDashboard = () => {
       className={`min-h-screen bg-white text-black dark:bg-black dark:text-white`}
     >
       <ToastContainer />
-      <div className="text-center text-2xl font-bold p-4 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border-b-2  border-gray-300 dark:border-gray-600">
-        Admin Dashboard
+      <div className="text-center flex justify-center items-center text-2xl font-bold p-4 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border-b-2 border-b-gray-900 dark:border-b-gray-100">
+        <span>Admin Dashboard</span>
+        <span className="ml-2">
+          <FaUserShield size={20} />
+        </span>
       </div>
       {/* Sidebar */}
       <div
@@ -182,35 +186,37 @@ const AdminDashboard = () => {
       </div>
 
       {/* Main Content */}
-      <main className="pt-20 md:pl-64 p-4">
+      <main className="md:pl-64 p-4">
         <div className="max-w-7xl mx-auto">
           {activeTab === "blogs" && (
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold">Published Blogs</h2>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-center items-center mb-6 md:justify-between p-5">
+                <h2 className="text-2xl font-bold text-center md:text-left uppercase">
+                  Published Blogs
+                </h2>
               </div>
 
-              <div className="grid gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {blogs
                   .sort((a, b) => new Date(b.date) - new Date(a.date))
                   .map((blog) => (
                     <div
                       key={blog._id || blog.id}
-                      className={`p-4 rounded-lg bg-white dark:bg-black shadow`}
+                      className="p-4 rounded-lg bg-white dark:bg-black shadow-md dark:shadow-gray-700"
                     >
                       <a
                         href={`/blogs/${blog._id || blog.id}`}
-                        className="hover:text-gray-600 cursor-pointer"
+                        className="hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
                       >
                         <h3 className="font-semibold">{blog.title}</h3>
                       </a>
 
-                      <div className="flex items-center justify-between w-full">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full mt-2">
                         <span className="flex items-center">
                           <SiLibreofficewriter className="mr-2" />
                           By {blog.author}
                         </span>
-                        <span className="flex items-center font-mono">
+                        <span className="flex items-center font-mono mt-2 sm:mt-0">
                           <FaCalendarDays className="mr-2" />
                           {new Date(blog.date).toLocaleString()}
                         </span>
@@ -218,19 +224,19 @@ const AdminDashboard = () => {
                       <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                         {blog.excerpt}
                       </p>
-                      <div className="flex justify-between items-center mt-4">
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4">
                         <div className="flex-grow">
                           <span className="px-2 py-1 rounded text-sm bg-gray-200 text-black">
                             Published
                           </span>
                         </div>
-                        <div className="flex gap-4">
-                          <button className="text-black hover:text-gray-600 font-bold">
+                        <div className="flex gap-2 mt-2 sm:mt-0">
+                          <button className="text-black dark:text-white hover:text-gray-600 font-bold">
                             Edit
                           </button>
                           <button
                             onClick={() => deleteBlog(blog._id)}
-                            className="text-black hover:text-red-700 font-bold"
+                            className="text-black dark:text-white hover:text-red-700 dark:hover:text-red-500 font-bold"
                           >
                             Delete
                           </button>
@@ -244,7 +250,7 @@ const AdminDashboard = () => {
 
           {activeTab === "createPost" && (
             <div className="max-w-4xl mx-auto p-4 md:p-6">
-              <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">
+              <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center uppercase">
                 Create New Post
               </h2>
               <form onSubmit={onSubmitHandler} className="space-y-6">
@@ -281,7 +287,7 @@ const AdminDashboard = () => {
                 </div>
 
                 <div>
-                  <label className="block mb-2 font-medium">Description</label>
+                  <label className="block mb-2 font-medium">Description (I can also put HTML Code)</label>
                   <input
                     type="text"
                     className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-black dark:bg-gray-800"
@@ -358,12 +364,12 @@ const AdminDashboard = () => {
           )}
 
           {activeTab === "subscribers" && (
-            <div>
-              <h2 className="text-xl ml-2 font-semibold mb-6">Subscribers →</h2>
+            <div className="overflow-x-auto">
+              <h2 className="text-2xl ml-6 font-bold mb-6">Subscribers</h2>
               <div
                 className={`rounded-lg bg-white dark:bg-black shadow-xl overflow-x-auto`}
               >
-                <table className="w-full">
+                <table className="w-full min-w-max pl-4">
                   <thead className={`bg-white dark:bg-gray-800 bg-gray-50'}`}>
                     <tr>
                       <th className="px-6 py-3 text-left">Email</th>
@@ -373,18 +379,27 @@ const AdminDashboard = () => {
                   </thead>
                   <tbody>
                     {emails && emails.length > 0 ? (
-                      emails.map((item) => (
-                        <tr
-                          key={item._id || item.id}
-                          className="border-t dark:border-gray-700"
-                        >
-                          <td className="px-6 py-4">{item.email}</td>
-                          <td className="px-6 py-4 font-mono">{new Date(item.date).toLocaleString()}</td>
-                          <td className="px-8 py-4" onClick={() => deleteEmail(item._id)}>
-                          <RiDeleteBin5Fill className="hover:text-red-600"/>
+                      emails
+                        .sort((a, b) => new Date(b.date) - new Date(a.date))
+                        .map((item) => (
+                          <tr
+                            key={item._id || item.id}
+                            className="border-t dark:border-gray-700"
+                          >
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              {item.email}
                             </td>
-                        </tr>
-                      ))
+                            <td className="px-6 py-4 font-mono whitespace-nowrap">
+                              {new Date(item.date).toLocaleString()}
+                            </td>
+                            <td
+                              className="px-8 py-4 text-center"
+                              onClick={() => deleteEmail(item._id)}
+                            >
+                              <RiDeleteBin5Fill className="hover:text-red-600 inline-block" />
+                            </td>
+                          </tr>
+                        ))
                     ) : (
                       <tr>
                         <td colSpan="3" className="px-6 py-4 text-center">
@@ -404,9 +419,9 @@ const AdminDashboard = () => {
       <nav className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white border-t md:hidden z-10">
         <div className="flex justify-around p-4">
           <button
-            onClick={() => setActiveTab("posts")}
+            onClick={() => setActiveTab("blogs")}
             className={`flex flex-col items-center ${
-              activeTab === "posts" ? "text-blue-500" : ""
+              activeTab === "blogs" ? "text-blue-500" : ""
             }`}
           >
             <HiPencil size={24} />

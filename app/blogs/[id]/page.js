@@ -55,8 +55,9 @@ const Page = () => {
             <h4
               className="text-base sm:text-lg md:text-sm lg:text-lg text-gray-600 dark:text-gray-400 mb-4 max-w-full break-words"
               title="Short Description"
+              dangerouslySetInnerHTML={{ __html: data.description }}
             >
-              {data.description}
+              {/* {data.description} */}
             </h4>
           </div>
 

@@ -22,6 +22,14 @@ import axios from "axios";
 import SimpleDivider from "@/components/SimpleDivider";
 import BlogsCard from "@/components/BlogsCard";
 import { useAuth } from "@/app/auth/AuthContext";
+import { AiFillLike } from "react-icons/ai";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Page = () => {
   const { isLoggedIn, userRole, logout } = useAuth(); // Get user data from context
@@ -29,6 +37,7 @@ const Page = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [blogs, setBlogs] = useState([]);
   const [bookmarkedBlogs, setBookmarkedBlogs] = useState([]);
+  const [likes, setLikes] = useState({});
 
   useEffect(() => {
     const bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
@@ -50,6 +59,33 @@ const Page = () => {
         const newBookmarks = [...bookmarkedBlogs, blogId];
         localStorage.setItem("bookmarks", JSON.stringify(newBookmarks));
         setBookmarkedBlogs(newBookmarks);
+      }
+    } else {
+      // Handle cases where the user is not authorized to bookmark
+      //  e.g., show an error message or redirect to login
+    }
+  };
+
+  useEffect(() => {
+    const likes = JSON.parse(localStorage.getItem("likes") || "{}");
+    setLikes(likes);
+  }, []);
+
+  const isLiked = (blogId) => {
+    return likes[blogId] > 0;
+  };
+
+  const toggleLike = (blogId) => {
+    if (userRole === "user" || userRole === "admin") {
+      // Check if user is logged in and has 'user' or 'admin' role
+      if (likes[blogId]) {
+        const newLikes = { ...likes, [blogId]: likes[blogId] - 1 };
+        localStorage.setItem("likes", JSON.stringify(newLikes));
+        setLikes(newLikes);
+      } else {
+        const newLikes = { ...likes, [blogId]: (likes[blogId] || 0) + 1 };
+        localStorage.setItem("likes", JSON.stringify(newLikes));
+        setLikes(newLikes);
       }
     } else {
       // Handle cases where the user is not authorized to bookmark
@@ -103,6 +139,34 @@ const Page = () => {
           <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 dark:bg-gray-100 group-hover:w-full transition-all duration-300 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"></span>
         </span>
       </h1>
+      <SimpleDivider type="gradient" />
+
+      {/* Category Drop down */}
+      <div className="w-[90%] md:w-[79%] mx-auto lg:block py-4">
+        <div className="sticky top-4">
+          <div className="p-4 md:p-6 rounded-lg shadow-lg dark:border-2 transition-all duration-300 hover:shadow-2xl">
+            <h3 className="flex items-center justify-center gap-2 text-lg md:text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 transition-colors duration-300 animate-fadeIn text-center uppercase font-poppins tracking-[0.1em] relative group">
+              <FaLayerGroup className="text-xl" />
+              <span className="relative">
+                Select Category
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-800 dark:bg-gray-200 group-hover:w-full transition-all duration-300"></span>
+              </span>
+            </h3>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Category</SelectItem>
+                <SelectItem value="technology">Technology</SelectItem>
+                <SelectItem value="design">Design</SelectItem>
+                <SelectItem value="business">Business</SelectItem>
+                <SelectItem value="lifestyle">Lifestyle</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
 
       <div className="container mx-auto px-4 py-8 transition-colors duration-200">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -142,14 +206,65 @@ const Page = () => {
                       {new Date(blog.date).toLocaleString()}
                     </span>
                   </div>
-                  <p className="text-xs sm:text-sm font-['Open_Sans'] text-gray-500 dark:text-gray-400 mt-3 sm:mt-4 line-clamp-2">
-                    {blog.description}
+                  <p
+                    className="text-xs sm:text-sm font-['Open_Sans'] text-gray-500 dark:text-gray-400 mt-3 sm:mt-4 line-clamp-2"
+                    dangerouslySetInnerHTML={{ __html: blog.description }}
+                  >
+                    {/* {blog.description} */}
                   </p>
                   <div className="h-px w-full bg-gray-500 my-6" />
                   <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 mb-4">
                     <div className="grid grid-cols-2 gap-14 xl:gap-20">
                       <div className="flex space-x-5">
-                        <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors">
+                        {/* <button
+                          onClick={() => toggleLike(blog._id)}
+                          className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+                          disabled={!userRole || !userRole === "loggedIn"}
+                        >
+                          <FaEye
+                            className={`w-5 h-5 ${
+                              isLiked(blog._id) ? "text-red-500" : ""
+                            }`}
+                          />
+                          <span>{likes[blog._id] || 0}</span>
+                        </button> */}
+
+                        {userRole === "user" ? (
+                          <button
+                            onClick={() => toggleLike(blog._id)}
+                            className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-red-300 dark:hover:text-red-400 transition-colors"
+                            disabled={!userRole || !userRole === "loggedIn"}
+                          >
+                            <AiFillLike
+                              className={`w-5 h-5 ${
+                                isLiked(blog._id) ? "text-red-500" : ""
+                              }`}
+                            />
+                          </button>
+                        ) : userRole === "admin" ? (
+                          <button
+                            onClick={() => toggleLike(blog._id)}
+                            className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-red-300 dark:hover:text-red-400 transition-colors"
+                            disabled={!userRole || !userRole === "loggedIn"}
+                          >
+                            <AiFillLike
+                              className={`w-5 h-5 ${
+                                isLiked(blog._id) ? "text-red-500" : ""
+                              }`}
+                            />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => toggleLike(blog._id)}
+                            className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-red-300 dark:hover:text-red-400 transition-colors"
+                            disabled={!userRole || !userRole === "loggedIn"}
+                          >
+                            <a href="/login">
+                              <AiFillLike className={`w-5 h-5`} />
+                            </a>
+                          </button>
+                        )}
+                        {/* <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors">
                           <svg
                             className="w-5 h-5"
                             fill="none"
@@ -164,8 +279,9 @@ const Page = () => {
                             />
                           </svg>
                           <span>{blog.likes}</span>
-                        </button>
-                        <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-500 dark-blue-400 transition-colors">
+                        </button> */}
+
+                        {/* <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-500 dark-blue-400 transition-colors" title="Soon to be implemented">
                           <svg
                             className="w-5 h-5"
                             fill="none"
@@ -180,7 +296,7 @@ const Page = () => {
                             />
                           </svg>
                           <span>{blog.comments}</span>
-                        </button>
+                        </button> */}
                         {userRole === "user" ? (
                           <button
                             onClick={() => toggleBookmark(blog._id)}
