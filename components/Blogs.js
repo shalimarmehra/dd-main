@@ -128,7 +128,7 @@ const Blogs = () => {
                       {blog.title}
                     </h3>
                     <span className="text-xs sm:text-sm block text-gray-500 dark:text-gray-400 mt-2 capitalize italic font-mono">
-                      {new Date(blog.date).toLocaleString()} | By {blog.author}
+                    {new Date(blog.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }).toUpperCase()} | By {blog.author}
                     </span>
                     <p className="text-xs sm:text-sm font-['Open_Sans'] text-gray-500 dark:text-gray-400 mt-3 sm:mt-4 line-clamp-2">
                       {blog.description}

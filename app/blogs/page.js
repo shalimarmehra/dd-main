@@ -203,7 +203,7 @@ const Page = () => {
                     </span>
                     <span className="flex items-center font-mono">
                       <FaCalendarDays className="mr-2" />
-                      {new Date(blog.date).toLocaleString()}
+                      {new Date(blog.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }).toUpperCase()}
                     </span>
                   </div>
                   <p
@@ -281,7 +281,7 @@ const Page = () => {
                           <span>{blog.likes}</span>
                         </button> */}
 
-                        {/* <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-500 dark-blue-400 transition-colors" title="Soon to be implemented">
+                        <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-500 dark-blue-400 transition-colors" title="Soon to be implemented">
                           <svg
                             className="w-5 h-5"
                             fill="none"
@@ -296,7 +296,7 @@ const Page = () => {
                             />
                           </svg>
                           <span>{blog.comments}</span>
-                        </button> */}
+                        </button>
                         {userRole === "user" ? (
                           <button
                             onClick={() => toggleBookmark(blog._id)}
